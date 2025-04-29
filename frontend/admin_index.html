@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin_style.css') }}">
+    <title>Admin</title>
+</head>
+<body>
+    <h2>Check Admin Role</h2>
+<form method="POST" action="/admin">
+    <label for="user_id">Enter User ID:</label>
+    <input type="text" name="user_id" required>
+    <button type="submit" name="check_role">Check</button>
+</form>
+
+{% if role_check_result %}
+    <h3>{{ role_check_result }}</h3>
+{% endif %}
+
+
+    
+
+
+{% if admin_output %}
+    <div style="margin-top: 20px;">
+        <h3>Result:</h3>
+        <pre>{{ admin_output }}</pre>
+    </div>
+{% endif %}
+{% if is_admin %}
+<form method="POST" action="/admin">
+    <input type="hidden" name="user_id" value="{{ user_id }}">
+
+    <button type="submit" name="action" value="view_bookings">View Bookings</button>
+    <button type="submit" name="action" value="view_maintenance">View Maintenance</button>
+    <button type="submit" name="action" value="add_buggy">View Buggy</button>
+</form>
+{% endif %}
+
+{% if bookings %}
+        <div id="bookings_result" style="margin-top: 20px;">
+            <h3>Bookings Data:</h3>
+            <table id="bookings_table" border="1">
+                <thead>
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>User ID</th>
+                        <th>Driver ID</th>
+                        <th>Buggy ID</th>
+                        <th>Booking Time</th>
+                        <th>Status</th>
+                        <th>Pickup Point</th>
+                        <th>Drop Point</th>
+                        <th>Invoice ID</th>
+                        <th>Invoice Date</th>
+                        <th>Fare</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                        <tr>
+                            <td>{{ booking.booking_id }}</td>
+                            <td>{{ booking.user_id }}</td>
+                            <td>{{ booking.driver_id }}</td>
+                            <td>{{ booking.buggy_id }}</td>
+                            <td>{{ booking.booking_time }}</td>
+                            <td>{{ booking.status }}</td>
+                            <td>{{ booking.pickup_point }}</td>
+                            <td>{{ booking.drop_point }}</td>
+                            <td>{{ booking.invoice_id }}</td>
+                            <td>{{ booking.invoice_date }}</td>
+                            <td>{{ booking.fare }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+    {% if maintainance %}
+<div id="maintainance_result" style="margin-top: 20px;">
+    <h3>Maintenance Data:</h3>
+    <table id="maintainance_table" border="1">
+        <thead>
+            <tr>
+                <th>Maintainance Date</th>
+                <th>Buggy ID</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in maintainance %}
+            <tr>
+                <td>{{ entry[0] }}</td> <!-- Maintenance Date -->
+                <td>{{ entry[1] }}</td> <!-- Buggy ID -->
+                <td>{{ entry[2] }}</td> <!-- Status -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <hr>
+</div>
+{% endif %}
+{% if buggies %}
+    <div id="buggies_result" style="margin-top: 20px;">
+        <h3>All Buggies:</h3>
+        <table id="buggies_table" border="1">
+            <thead>
+                <tr>
+                    <th>Buggy ID</th>
+                    <th>Model</th>
+                    <th>Capacity</th>
+                    <th>Status</th>
+                    <th>Location</th>
+                    <th>Driver ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for buggy in buggies %}
+                    <tr>
+                        <td>{{ buggy.buggy_id }}</td>
+                        <td>{{ buggy.model }}</td>
+                        <td>{{ buggy.capacity }}</td>
+                        <td>{{ buggy.status }}</td>
+                        <td>{{ buggy.location }}</td>
+                        <td>{{ buggy.driver_id if buggy.driver_id else 'Unassigned' }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <hr>
+    </div>
+{% endif %}
+
+
+
+
+  
+
+
+</body>
+</html>
+
+
+
+

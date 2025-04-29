@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Info & Routes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Search User</h1>
+        <form method="POST">
+            <label for="user_id">User ID:</label>
+            <input type="text" name="user_id" required>
+            <button type="submit">Submit</button>
+        </form>
+
+        {% if user_details %}
+            <h2>User Details</h2>
+            <table>
+                <tr><th>User ID</th><td>{{ user_details[0] }}</td></tr>
+                <tr><th>Name</th><td>{{ user_details[1] }}</td></tr>
+                <tr><th>Email</th><td>{{ user_details[2] }}</td></tr>
+                <tr><th>Role</th><td>{{ user_details[3] }}</td></tr>
+                <tr><th>Contact Number</th><td>{{ user_details[4] }}</td></tr>
+            </table>
+            
+            {% if available_buggies_routes %}
+    <h2>Available Buggies & Fare</h2>
+    <pre>
+    {% for line in available_buggies_routes %}
+        {{ line }}
+    {% endfor %}
+    </pre>
+{% endif %}
+{% if booking_message %}
+    <h3>{{ booking_message }}</h3>
+{% endif %}
+
+<h2>Book a Buggy</h2>
+<form method="POST">
+    <input type="hidden" name="user_id" value="{{ user_details[0] }}">
+    <label for="buggy_id">Buggy ID:</label>
+    <input type="text" name="buggy_id" required><br>
+
+    <label for="pickup_point">Pickup Point:</label>
+    <input type="text" name="pickup_point" required><br>
+
+    <label for="drop_point">Drop Point:</label>
+    <input type="text" name="drop_point" required><br>
+
+    <label for="status">Booking Status:</label>
+    <select name="status" required>
+        <option value="confirmed">Confirmed</option>
+        <option value="reserved">Reserved</option>
+    </select><br>
+
+    <label for="date">Booking Date (YYYY-MM-DD):</label>
+    <input type="text" name="date" required><br>
+
+    <button type="submit" name="book_buggy">Book Buggy</button>
+</form>
+
+{% if invoice_details %}
+    <h2>--- INVOICE ---</h2>
+    <table>
+        <tr><th>Booking ID</th><td>{{ invoice_details.booking_id }}</td></tr>
+        <tr><th>Buggy ID</th><td>{{ invoice_details.buggy_id }}</td></tr>
+        <tr><th>User ID</th><td>{{ invoice_details.user_id }}</td></tr>
+        <tr><th>Driver ID</th><td>{{ invoice_details.driver_id }}</td></tr>
+        <tr><th>Pickup</th><td>{{ invoice_details.pickup_point }}</td></tr>
+        <tr><th>Drop</th><td>{{ invoice_details.drop_point }}</td></tr>
+        <tr><th>Booking Time</th><td>{{ invoice_details.booking_time }}</td></tr>
+        <tr><th>Invoice ID</th><td>{{ invoice_details.invoice_id }}</td></tr>
+        <tr><th>Invoice Date</th><td>{{ invoice_details.invoice_date }}</td></tr>
+        <tr><th>Fare</th><td>Rs. {{ invoice_details.fare }}</td></tr>
+    </table>
+{% endif %}
+
+        {% endif %}
+        
+    </div>
+</body>
+</html>
